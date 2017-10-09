@@ -1,6 +1,6 @@
 import arcade
-from Actor import Player,World,Beef,Pig,Chic,Plate,Tau
-from pyglet.window import key
+from Actor import World,Player,Beef,Pig,Chic,Plate,Tau
+from pyglet.window import mouse
 
  
 SCREEN_WIDTH = 760
@@ -34,14 +34,15 @@ class BBQwindow(arcade.Window):
         self.BeefW_sprite = ModelSprite("image/BeefWell.png",model=self.world.beefW)
         self.PigW_sprite = ModelSprite("image/PigWell.png",model=self.world.pigW)
         self.ChicW_sprite = ModelSprite("image/ChicWell.png",model=self.world.chicW)   
-        self.player_sprite = ModelSprite("image/hand1.png",model=self.world.player)  
-    def on_key_press(self, key, modifiers): 
+        self.player_sprite = ModelSprite("image/hand1.png",model=self.world.player)
+
+    def on_mouse_motion(self,x, y, dx, dy):
         pass
-  
-    
+    def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
+        self.world.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
     def on_draw(self):
         arcade.start_render()  
-        self.world.control(keys) 
+        
         self.Beef_sprite.draw()
         self.Pig_sprite.draw()
         self.Chic_sprite.draw()
@@ -52,14 +53,13 @@ class BBQwindow(arcade.Window):
         self.ChicW_sprite.draw()
         self.player_sprite.draw()
 
-
     def update(self,delta):
-        self.world.update(delta)
         
-      
+        self.world.update(delta)
+
  
 if __name__ == '__main__':
     window = BBQwindow(SCREEN_WIDTH, SCREEN_HEIGHT)
-    keys = key.KeyStateHandler()
-    window.push_handlers(keys)
+    #keys = key.KeyStateHandler()
+    #window.push_handlers(keys)
     arcade.run()

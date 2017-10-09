@@ -1,5 +1,5 @@
 import arcade
-from pyglet.window import key
+from pyglet.window import mouse
 
 class Model:
     def __init__(self, world, x, y):
@@ -12,20 +12,18 @@ class Player(Model):
     def __init__(self, world, x,y):
         super().__init__(world, x, y)
 
-    def control(self, keys):
-
-        if keys[key.LEFT]:
-            self.x -= 10
-        if keys[key.RIGHT]:
-            self.x += 10
-        if keys[key.UP]:
-            self.y += 10
-        if keys[key.DOWN]:
-            self.y -= 10
 
     def update(self, delta):
         if self.x<0:
-            self.x = 0
+            self.x += 10
+        elif self.x>self.world.width-80:
+            self.x -=10
+        elif self.y<0:
+            self.y +=10
+        elif self.y>self.world.width-80:
+            self.y -=10
+
+
 class Beef(Model):
 
     def __init__(self, world, x,y):
@@ -107,10 +105,13 @@ class World:
         self.pigW = PigWell(self,100,240)
         self.chicW = ChicWell(self,135,240)
 
-    def control(self, keys):
-        self.player.control(keys) 
+    def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
+        if buttons and mouse.LEFT:
+            self.beef.x = x
+            self.beef.y = y 
 
     def update(self, delta):
+
         self.player.update(delta)
         self.beef.update(delta)
         self.pig.update(delta)
@@ -120,3 +121,4 @@ class World:
         self.beefW.update(delta)
         self.pigW.update(delta)
         self.chicW.update(delta)
+        
