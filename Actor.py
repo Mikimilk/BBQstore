@@ -6,12 +6,23 @@ class Model:
         self.world = world
         self.x = x
         self.y = y
+    def hit(self, other, hit_size):
+        return (abs(self.x - other.x) <= hit_size) and (abs(self.y - other.y) <= hit_size)
 
 class Player(Model):
 
     def __init__(self, world, x,y):
         super().__init__(world, x, y)
 
+    def on_mouse_motion(self,x, y, dx, dy):
+        self.x = x
+        self.y = y
+        print(x)
+
+    def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
+        if buttons and mouse.LEFT:
+            self.x = x
+            self.y = y
 
     def update(self, delta):
         if self.x<0:
@@ -104,11 +115,22 @@ class World:
         self.beefW = BeefWell(self,65,240)
         self.pigW = PigWell(self,100,240)
         self.chicW = ChicWell(self,135,240)
+        #set position BBQ
+        #self.beef.set_position(500,100)
+        #self.pig.set_position(570,100)
+        #self.chic.set_position(640,100)
+        #self.BBQ_list = arcade.SpriteList()
+        #append to BBQ_list
+        #self.BBQ_list.append(self.beef)
+        #self.BBQ_list.append(self.pig)
+        #self.BBQ_list.append(self.chic)
 
     def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
-        if buttons and mouse.LEFT:
-            self.beef.x = x
-            self.beef.y = y 
+        if self.player.hit(self.beef, 100):
+            print("Hit")
+            if buttons and mouse.LEFT:
+                self.beef.x = x
+                self.beef.y = y
 
     def update(self, delta):
 

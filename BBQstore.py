@@ -26,28 +26,43 @@ class BBQwindow(arcade.Window):
         super().__init__(width, height)
         arcade.set_background_color(arcade.color.PINK)
         self.world = World(width, height) 
+        self.Tau_sprite = ModelSprite("image/Tau.png",model=self.world.tau)   
+        self.Plate_sprite = ModelSprite("image/Plate.png",model=self.world.plate)
         self.Beef_sprite = ModelSprite("image/BeefRare.png",model=self.world.beef)
         self.Pig_sprite = ModelSprite("image/PigRare.png",model=self.world.pig)
         self.Chic_sprite = ModelSprite("image/ChicRare.png",model=self.world.chic)
-        self.Tau_sprite = ModelSprite("image/Tau.png",model=self.world.tau)   
-        self.Plate_sprite = ModelSprite("image/Plate.png",model=self.world.plate)
         self.BeefW_sprite = ModelSprite("image/BeefWell.png",model=self.world.beefW)
         self.PigW_sprite = ModelSprite("image/PigWell.png",model=self.world.pigW)
         self.ChicW_sprite = ModelSprite("image/ChicWell.png",model=self.world.chicW)   
         self.player_sprite = ModelSprite("image/hand1.png",model=self.world.player)
+        #self.BBQ_list = arcade.SpriteList()
+        #set position
+        #self.Beef_sprite.set_position(500,100)
+        #self.Pig_sprite.set_position(570,100)
+        #self.Chic_sprite.set_position(640,100)
+        #append to BBQ_list
+        #self.BBQ_list.append(self.Beef_sprite)
+        #self.BBQ_list.append(self.Pig_sprite)
+        #self.BBQ_list.append(self.Chic_sprite)
 
     def on_mouse_motion(self,x, y, dx, dy):
-        pass
+        self.world.player.on_mouse_motion(x, y, dx, dy)
+
+    #def on_mouse_press(x, y, button, modifiers):
+        #self.world.on_mouse_drag(x, y, buttons, modifiers)
     def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
         self.world.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
+        self.world.player.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
+
     def on_draw(self):
         arcade.start_render()  
         
+        self.Tau_sprite.draw()
+        self.Plate_sprite.draw()
         self.Beef_sprite.draw()
         self.Pig_sprite.draw()
         self.Chic_sprite.draw()
-        self.Tau_sprite.draw()
-        self.Plate_sprite.draw()
+        #self.BBQ_list.draw()
         self.BeefW_sprite.draw()
         self.PigW_sprite.draw()
         self.ChicW_sprite.draw()
