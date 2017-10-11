@@ -1,4 +1,5 @@
 import arcade
+import time
 from pyglet.window import mouse
 
 class Model:
@@ -41,24 +42,24 @@ class Beef(Model):
         super().__init__(world, x, y)
 
     def update(self, delta):
-        if self.x<0:
-            self.x = 0
+        if self.x>28 and self.x<460 and self.y>30 and self.y<100:
+            print('Beef is on stove.')
 class Pig(Model):
 
     def __init__(self, world, x,y):
         super().__init__(world, x, y)
 
     def update(self, delta):
-        if self.x<0:
-            self.x = 0
+        if self.x>28 and self.x<460 and self.y>30 and self.y<100:
+            print('Pig is on stove.')
 class Chic(Model):
 
     def __init__(self, world, x,y):
         super().__init__(world, x, y)
 
     def update(self, delta):
-        if self.x<0:
-            self.x = 0
+        if self.x>28 and self.x<460 and self.y>30 and self.y<100:
+            print('Chicken is on stove.')
 class BeefWell(Model):
 
     def __init__(self, world, x,y):
@@ -114,9 +115,8 @@ class World:
         self.plate = Plate(self,240,240)
         self.beefW = BeefWell(self,65,240)
         self.pigW = PigWell(self,100,240)
-        self.chicW = ChicWell(self,135,240)
-
-
+        self.chicW = ChicWell(self,135,240) 
+  
     def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
         if self.player.hit(self.beef, 20):
             if buttons and mouse.LEFT:
