@@ -35,15 +35,7 @@ class BBQwindow(arcade.Window):
         self.PigW_sprite = ModelSprite("image/PigWell.png",model=self.world.pigW)
         self.ChicW_sprite = ModelSprite("image/ChicWell.png",model=self.world.chicW)   
         self.player_sprite = ModelSprite("image/hand1.png",model=self.world.player)
-        #self.BBQ_list = arcade.SpriteList()
-        #set position
-        #self.Beef_sprite.set_position(500,100)
-        #self.Pig_sprite.set_position(570,100)
-        #self.Chic_sprite.set_position(640,100)
-        #append to BBQ_list
-        #self.BBQ_list.append(self.Beef_sprite)
-        #self.BBQ_list.append(self.Pig_sprite)
-        #self.BBQ_list.append(self.Chic_sprite)
+
 
     def on_mouse_motion(self,x, y, dx, dy):
         self.world.player.on_mouse_motion(x, y, dx, dy)
@@ -62,7 +54,6 @@ class BBQwindow(arcade.Window):
         self.Beef_sprite.draw()
         self.Pig_sprite.draw()
         self.Chic_sprite.draw()
-        #self.BBQ_list.draw()
         self.BeefW_sprite.draw()
         self.PigW_sprite.draw()
         self.ChicW_sprite.draw()
@@ -75,6 +66,4 @@ class BBQwindow(arcade.Window):
  
 if __name__ == '__main__':
     window = BBQwindow(SCREEN_WIDTH, SCREEN_HEIGHT)
-    #keys = key.KeyStateHandler()
-    #window.push_handlers(keys)
     arcade.run()
