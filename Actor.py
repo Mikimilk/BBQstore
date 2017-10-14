@@ -1,7 +1,7 @@
 import arcade
 import time
 from pyglet.window import mouse
-
+roasting = 5.0
 class Model:
     def __init__(self, world, x, y):
         self.world = world
@@ -43,7 +43,8 @@ class Beef(Model):
 
     def update(self, delta):
         if self.x>28 and self.x<460 and self.y>30 and self.y<100:
-            print('Beef is on stove.')
+            pass#print('Beef is on stove.')
+            
 class Pig(Model):
 
     def __init__(self, world, x,y):
@@ -51,7 +52,7 @@ class Pig(Model):
 
     def update(self, delta):
         if self.x>28 and self.x<460 and self.y>30 and self.y<100:
-            print('Pig is on stove.')
+            pass#print('Pig is on stove.')
 class Chic(Model):
 
     def __init__(self, world, x,y):
@@ -59,15 +60,14 @@ class Chic(Model):
 
     def update(self, delta):
         if self.x>28 and self.x<460 and self.y>30 and self.y<100:
-            print('Chicken is on stove.')
+            pass#print('Chicken is on stove.')
 class BeefWell(Model):
 
     def __init__(self, world, x,y):
         super().__init__(world, x, y)
 
     def update(self, delta):
-        if self.x<0:
-            self.x = 0
+        pass
 class PigWell(Model):
 
     def __init__(self, world, x,y):
@@ -116,7 +116,10 @@ class World:
         self.beefW = BeefWell(self,65,240)
         self.pigW = PigWell(self,100,240)
         self.chicW = ChicWell(self,135,240) 
-  
+
+        self.roast_time = roasting
+        self.timer_text = None
+
     def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
         if self.player.hit(self.beef, 20):
             if buttons and mouse.LEFT:
@@ -131,6 +134,18 @@ class World:
                 self.chic.x = x
                 self.chic.y = y
 
+    def draw_text(self):
+        minutes = int(self.roast_time) // 60
+        seconds = int(self.roast_time) % 60
+
+        output = f"Time: {minutes:02d}:{seconds:02d}"
+
+        if not self.timer_text or self.timer_text.text != output:
+            self.timer_text = arcade.create_text(output, arcade.color.BLACK, 20)
+
+        # Output the timer text.
+        arcade.render_text(self.timer_text, 500, 30)
+
     def update(self, delta):
 
         self.player.update(delta)
@@ -142,4 +157,22 @@ class World:
         self.beefW.update(delta)
         self.pigW.update(delta)
         self.chicW.update(delta)
+
+        if self.beef.x>28 and self.beef.x<460 and self.beef.y>30 and self.beef.y<100:
+            print("Now, on the stove.")
+            self.roast_time -= delta
+            seconds = int(self.roast_time) % 60
+            minutes = int(self.roast_time) // 60
+            
+            if seconds==0 or minutes<0 :
+                print("Now, roasting")
+                self.beefW.x = self.beef.x 
+                self.beefW.y = self.beef.y
+                self.beef.x = 500 
+                self.beef.y = 100
+            
+        #if self.pig.x>28 and self.pig.x<460 and self.pig.y>30 and self.pig.y<100:
+
+        #if self.chic.x>28 and self.chic.x<460 and self.chic.y>30 and self.chic.y<100:
+
         

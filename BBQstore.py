@@ -1,5 +1,4 @@
 import arcade
-import time
 from Actor import World,Player,Beef,Pig,Chic,Plate,Tau
 from pyglet.window import mouse
 
@@ -36,12 +35,7 @@ class BBQwindow(arcade.Window):
         self.PigW_sprite = ModelSprite("image/PigWell.png",model=self.world.pigW)
         self.ChicW_sprite = ModelSprite("image/ChicWell.png",model=self.world.chicW)   
         self.player_sprite = ModelSprite("image/hand1.png",model=self.world.player)
-        #self.timer_sprite = ModelSprite("image/Timebox.png",model=self.world.timer)
-        #self.total_time = 0.0
-        #self.timer_text = None
-        
-    def countdown(self, n):
-        self.world.Countdown(n) 
+
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.world.player.on_mouse_motion(x, y, dx, dy)
@@ -65,13 +59,8 @@ class BBQwindow(arcade.Window):
         self.PigW_sprite.draw()
         self.ChicW_sprite.draw()
         self.player_sprite.draw()
-        #minutes = int(self.total_time) // 60
-        #seconds = int(self.total_time) % 60
-        #output = f"Time: {minutes:02d}:{seconds:02d}"
-        #if not self.timer_text or self.timer_text.text != output:
-            #self.timer_text = arcade.create_text(output, arcade.color.BLACK, 20)
-
-       # arcade.render_text(self.timer_text, 20, 520)
+    
+        self.world.draw_text()
 
     def update(self,delta):
         
