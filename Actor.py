@@ -30,26 +30,34 @@ class Player(Model):
 
     def update(self, delta):
        pass
-
-class Pig(arcade.Sprite):
-    def __init__(self, filename, scale):
-        super().__init__(filename, scale)
-        # Flip this once the coing has been collected.
-        self.changed = False
-    def update(self):
-        pass
         
 class Beef(arcade.Sprite):
-    def __init__(self, filename, scale):
-        super().__init__(filename, scale)
+    def __init__(self):
+        super().__init__()
+        # Flip this once the coing has been collected.
+        self.changed = False
+        self.roasting_time = roasting
+    def update(self,delta):
+        if self.center_x >= 60 and self.center_x <= 665:
+            print("Beef on the stove")
+            self.roasting_time -= delta
+            seconds = int(self.roast_time) % 60
+            minutes = int(self.roast_time) // 60
+            if seconds==0 or minutes<0 :
+                self.texture = arcade.load_texture("image/BeefWell.png")
+                self.changed = True
+
+class Pig(arcade.Sprite):
+    def __init__(self):
+        super().__init__()
         # Flip this once the coing has been collected.
         self.changed = False
     def update(self):
         pass
 
 class Chicken(arcade.Sprite):
-    def __init__(self, filename, scale):
-        super().__init__(filename, scale)
+    def __init__(self):
+        super().__init__()
         # Flip this once the coing has been collected.
         self.changed = False
     def update(self):
@@ -171,6 +179,72 @@ class World:
         self.button1 = Button1(self,545,100)
         self.button2 = Button2(self,605,100)
         self.button3 = Button3(self,665,100)
+        #make Beef class
+        self.Beef_list = []
+        beef = Beef()
+        self.Beef_list.append(beef)
+        #make Pig class
+        self.Pig_list = []
+        pig = Pig()
+        self.Pig_list.append(pig)
+        #make Chicken class
+        self.Chic_list = []
+        chic = Chicken()
+        self.Chic_list.append(chic)
+
+        #make all BBQ list
+        self.Beef_list_sprite = arcade.SpriteList()
+        self.Pig_list_sprite = arcade.SpriteList()
+        self.Chic_list_sprite = arcade.SpriteList()
+        self.All_BBQ_list = arcade.SpriteList()
+
+        #initialize stove status and stove position
+        self.stove_status = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.stove_position = [60, 100, 140, 183, 226, 266, 306, 343, 382, 423]
+
+        #Roasting time
+        self.roasting_time = roasting
+   
+    def on_mouse_press(self,x,y,buttons,modifiers):
+        if self.player.hit(self.button1,20):
+            for i in range(len(self.stove_status)):
+                if self.stove_status[i]==1:
+                    continue
+                self.stove_status[i] = 1
+                Beef_sprite = arcade.Sprite("image/BeefRare.png")
+                Beef_sprite.set_position(self.stove_position[i],100)
+                break
+            #contend Beef to list.
+            self.Beef_list.append(Beef())
+            self.Beef_list_sprite.append(Beef_sprite)
+            self.All_BBQ_list.append(Beef_sprite)
+
+
+        if self.player.hit(self.button2,20):
+            for i in range(len(self.stove_status)):
+                if self.stove_status[i]==1:
+                    continue
+                self.stove_status[i] = 1
+                Pig_sprite = arcade.Sprite("image/PigRare.png")
+                Pig_sprite.set_position(self.stove_position[i],100)
+                break
+            #contend Pig to list.
+            self.Pig_list.append(Pig())
+            self.Pig_list_sprite.append(Pig_sprite)
+            self.All_BBQ_list.append(Pig_sprite)
+
+        if self.player.hit(self.button3,20):
+            for i in range(len(self.stove_status)):
+                if self.stove_status[i]==1:
+                    continue
+                self.stove_status[i] = 1
+                Chic_sprite = arcade.Sprite("image/ChicRare.png")
+                Chic_sprite.set_position(self.stove_position[i],100)
+                break
+            #contend Chicken to list.
+            self.Chic_list.append(Chicken()) 
+            self.Chic_list_sprite.append(Chic_sprite)     
+            self.All_BBQ_list.append(Chic_sprite)
 
 
     def update(self,delta):
@@ -189,13 +263,9 @@ class World:
         self.button2.update(delta)
         self.button3.update(delta)
 
+        for i in range(len(self.Beef_list)):
+            self.Beef_list[i].update(delta)
 
-        if self.player.hit(self.stove1, 20):
-            print("Touch stove1")
-        if self.player.hit(self.stove2, 20):
-            print("Touch stove2")
-        if self.player.hit(self.stove3, 20):
-            print("Touch stove3")
 
 
 
