@@ -1,6 +1,6 @@
 import arcade
 import random
-from Actor2 import World,Player,Stove1,Stove2,Stove3,Stove4,Stove5,Stove6,Stove7,Stove8,Stove9,Stove10,Model,Collectable,Beef,Pig,Chicken
+from Actor import World,Player,Stove1,Stove2,Stove3,Stove4,Stove5,Stove6,Stove7,Stove8,Stove9,Stove10,Model,Collectable,Beef,Pig,Chicken,Bag
 from pyglet.window import mouse
 
 roasting = 5
@@ -25,8 +25,8 @@ class ModelSprite(arcade.Sprite):
 class BBQwindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
-        arcade.set_background_color(arcade.color.PINK)
-        self.world = World(width, height) 
+        self.world = World(width, height)
+        self.background = arcade.load_texture("image/Background.png") 
         #initialize player
         self.player_sprite = ModelSprite("image/hand1.png",model=self.world.player)
 
@@ -46,6 +46,8 @@ class BBQwindow(arcade.Window):
         self.Button1_sprite = ModelSprite("image/Button1.png",model=self.world.button1)
         self.Button2_sprite = ModelSprite("image/Button2.png",model=self.world.button2)
         self.Button3_sprite = ModelSprite("image/Button3.png",model=self.world.button3)
+        #initialize Bag
+        self.Bag_sprite = ModelSprite("image/Bag.png",model=self.world.bag)
 
 
     def on_mouse_motion(self, x, y, dx, dy):
@@ -61,6 +63,10 @@ class BBQwindow(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()  
+        arcade.draw_texture_rectangle(SCREEN_WIDTH//2 , SCREEN_HEIGHT//2 ,
+                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+        #draw bag
+        self.Bag_sprite.draw()
         #draw all a piece of stove.
         self.Stove1_sprite.draw()
         self.Stove2_sprite.draw()
