@@ -55,7 +55,7 @@ class BBQwindow(arcade.Window):
 
 
     #def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
-        #self.world.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
+        #self.world.player.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
 
     def on_mouse_press(self,x,y,buttons,modifiers):
         #Check player hit button

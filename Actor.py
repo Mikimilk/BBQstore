@@ -27,9 +27,14 @@ class Player(Model):
     def on_mouse_motion(self,x, y, dx, dy):
         self.x = x
         self.y = y
-
+        self.mouse_drag = False
+    
+    #def on_mouse_drag(self,x, y, dx, dy, buttons, modifiers):
+        #if buttons & mouse.LEFT:
+            #self.mouse_drag = True
+        
     def update(self, delta):
-       pass
+        pass
         
 class Beef:
     def __init__(self):
@@ -210,21 +215,22 @@ class World:
         self.roasting_time = roasting
         #make a bag
         self.bag = Bag(self,670,270)
+
    
     def on_mouse_press(self,x,y,buttons,modifiers):
         if self.player.hit(self.button1,20):
-            for n in range(1): #store beef n position
-                for i in range(len(self.stove_status)): 
-                    if self.stove_status[i]==1: #check stove status before push a BBQ
-                       continue
-                    self.stove_status[i] = 1 #stove i is not availble
-                    self.what_on_stove[i] = 1 #beef is on stove i
-                    self.Beef_sprite = arcade.Sprite("image/BeefRare.png")
-                    self.Beef_sprite.set_position(self.stove_position[i],100) #Beef n
-                    beef_on_stove = self.stove_position[i] #Beef n is on position i
-                    break
+            for i in range(len(self.stove_status)): 
+                if self.stove_status[i]==1: #check stove status before push a BBQ
+                    continue
+                self.stove_status[i] = 1 #stove i is not availble
+                self.what_on_stove[i] = 1 #beef is on stove i
+                self.Beef_sprite = arcade.Sprite("image/BeefRare.png")
+                self.Beef_sprite.set_position(self.stove_position[i],100) #Beef n
+                beef_on_stove = self.stove_position[i] #Beef n is on position i
+                print(beef_on_stove)
                 break
-                #contend Beef to list.
+
+            #contend Beef to list.
             self.Beef_list.append(Beef())
             self.Beef_list_sprite.append(self.Beef_sprite)
             self.All_BBQ_list.append(self.Beef_sprite)
@@ -259,22 +265,39 @@ class World:
             self.Chic_list_sprite.append(Chic_sprite)     
             self.All_BBQ_list.append(Chic_sprite)
 
+        #Pick up BBQ from the stove
+        for i in range(len(self.Beef_list_sprite)):
+            if abs(self.player.x - self.Beef_list_sprite[i].center_x) <= 20 and abs(self.player.y - self.Beef_list_sprite[i].center_y) <= 20 :
+                for n in range(len(self.beef_on_stove)):
+                    if self.beef_on_stove[n] == self.Beef_list_sprite[i].center_x:
+                        print("Kill position :")
+                        print(self.beef_on_stove[n])
+                        del self.beef_on_stove[n]
+                        print("Kill position complete.")
+                        break
+                self.Beef_list_sprite[i].kill()
+                print("Kill Beef from the list complete.")
+                print("The number of beefs on the stove.")
+                print(len(self.beef_on_stove))
+
+
+
+        for i in range(len(self.Pig_list_sprite)):
+            if abs(self.player.x - self.Pig_list_sprite[i].center_x) <= 20 and abs(self.player.y - self.Pig_list_sprite[i].center_y) <= 20 :
+                self.Pig_list_sprite[i].kill()
+                print("After kill")
+                print("Pig on stove:")
+                print(len(self.Pig_list_sprite))
+
+        for i in range(len(self.Chic_list_sprite)):
+            if abs(self.player.x - self.Chic_list_sprite[i].center_x) <= 20 and abs(self.player.y - self.Chic_list_sprite[i].center_y) <= 20 :
+                self.Chic_list_sprite[i].kill()
+                print("After kill")
+                print("Chic on stove:")
+                print(len(self.Chic_list_sprite))
+            
 
     def update(self,delta):
-        self.player.update(delta)
-        self.stove1.update(delta)
-        self.stove2.update(delta)
-        self.stove3.update(delta)
-        self.stove4.update(delta)
-        self.stove5.update(delta)
-        self.stove6.update(delta)
-        self.stove7.update(delta)
-        self.stove8.update(delta)
-        self.stove9.update(delta)
-        self.stove10.update(delta)
-        self.button1.update(delta)
-        self.button2.update(delta)
-        self.button3.update(delta)
 
         for i in range(len(self.stove_status)):
             if self.stove_status[i]==0 and self.what_on_stove[i]==0: #Check stove status and what on stove "Nothing -->continue"
@@ -282,43 +305,48 @@ class World:
             N = i # N is current position.
             if self.what_on_stove[i]==1 :#Stove's position i is beef
 
-                for i in range(len(self.Beef_list_sprite)): #To check Beef_sprite in Beef_list_sprite is on position i ??
-                    self.Beef_list[i].update(delta) #Update Beef()
-                    Beef_sprite = self.Beef_list_sprite[i] #Decleration Beef_sprite as Beef_list_sprite i     
-                    if Beef_sprite.center_x != self.stove_position[N]: #Check position of Beef_sprite(Beef_list_sprite i) 
-                        continue
-
-                    seconds = int(self.Beef_list[i].roasting_time) % 60
-                    minutes = int(self.Beef_list[i].roasting_time) // 60
-                    break
-                if seconds==0 or minutes<0 :
-                    Beef_sprite.texture = arcade.load_texture("image/BeefWell.png")
-                    Beef_sprite.changed = True
+                if len(self.Beef_list_sprite) != 0:
+                    for i in range(len(self.Beef_list_sprite)): #To check Beef_sprite in Beef_list_sprite is on position i ??
+                        self.Beef_list[i].update(delta) #Update Beef()
+                        Beef_sprite = self.Beef_list_sprite[i] #Decleration Beef_sprite as Beef_list_sprite i     
+                        if Beef_sprite.center_x != self.stove_position[N]: #Check position of Beef_sprite(Beef_list_sprite i) 
+                            continue
+  
+                        seconds = int(self.Beef_list[i].roasting_time) % 60
+                        minutes = int(self.Beef_list[i].roasting_time) // 60
+                        break
+                    if seconds==0 or minutes<0 :
+                        Beef_sprite.texture = arcade.load_texture("image/BeefWell.png")
+                        Beef_sprite.changed = True
 
             elif self.what_on_stove[i]==2 :
-                for i in range(len(self.Pig_list_sprite)): #To check Pig_sprite in Pig_list_sprite is on position i ??
-                    self.Pig_list[i].update(delta) #Update Pig()
-                    Pig_sprite = self.Pig_list_sprite[i] #Decleration Pig_sprite as Pig_list_sprite i     
-                    if Pig_sprite.center_x != self.stove_position[N]: #Check position of Pig_sprite(Pig_list_sprite i) 
-                        continue
+                if len(self.Pig_list_sprite) != 0:
+                    for i in range(len(self.Pig_list_sprite)): #To check Pig_sprite in Pig_list_sprite is on position i ??
+                        self.Pig_list[i].update(delta) #Update Pig()
+                        Pig_sprite = self.Pig_list_sprite[i] #Decleration Pig_sprite as Pig_list_sprite i     
+                        if Pig_sprite.center_x != self.stove_position[N]: #Check position of Pig_sprite(Pig_list_sprite i) 
+                            continue
 
-                    seconds = int(self.Pig_list[i].roasting_time) % 60
-                    minutes = int(self.Pig_list[i].roasting_time) // 60
-                    break
-                if seconds==0 or minutes<0 :
-                    Pig_sprite.texture = arcade.load_texture("image/PigWell.png")
-                    Pig_sprite.changed = True
+                        seconds = int(self.Pig_list[i].roasting_time) % 60
+                        minutes = int(self.Pig_list[i].roasting_time) // 60
+                        break
+                    if seconds==0 or minutes<0 :
+                        Pig_sprite.texture = arcade.load_texture("image/PigWell.png")
+                        Pig_sprite.changed = True
 
             elif self.what_on_stove[i]==3 :
-                for i in range(len(self.Chic_list_sprite)): #To check Chic_sprite in Chic_list_sprite is on position i ??
-                    self.Chic_list[i].update(delta) #Update Chicken()
-                    Chic_sprite = self.Chic_list_sprite[i] #Decleration Chic_sprite as Chic_list_sprite i     
-                    if Chic_sprite.center_x != self.stove_position[N]: #Check position of Chic_sprite(Chic_list_sprite i) 
-                        continue
+                if len(self.Chic_list_sprite) != 0:
+                    for i in range(len(self.Chic_list_sprite)): #To check Chic_sprite in Chic_list_sprite is on position i ??
+                        self.Chic_list[i].update(delta) #Update Chicken()
+                        Chic_sprite = self.Chic_list_sprite[i] #Decleration Chic_sprite as Chic_list_sprite i     
+                        if Chic_sprite.center_x != self.stove_position[N]: #Check position of Chic_sprite(Chic_list_sprite i) 
+                            continue
 
-                    seconds = int(self.Chic_list[i].roasting_time) % 60
-                    minutes = int(self.Chic_list[i].roasting_time) // 60
-                    break
-                if seconds==0 or minutes<0 :
-                    Chic_sprite.texture = arcade.load_texture("image/ChicWell.png")
-                    Chic_sprite.changed = True
+                        seconds = int(self.Chic_list[i].roasting_time) % 60
+                        minutes = int(self.Chic_list[i].roasting_time) // 60
+                        break
+                    if seconds==0 or minutes<0 :
+                        Chic_sprite.texture = arcade.load_texture("image/ChicWell.png")
+                        Chic_sprite.changed = True
+
+        
