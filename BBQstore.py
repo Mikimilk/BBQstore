@@ -85,7 +85,9 @@ class BBQwindow(arcade.Window):
         self.Button3_sprite.draw()
 
         #draw all BBQ
-        self.world.All_BBQ_list.draw()
+        self.world.Beef_list_sprite.draw()
+        self.world.Pig_list_sprite.draw()
+        self.world.Chic_list_sprite.draw()
 
         #draw player
         self.player_sprite.draw()

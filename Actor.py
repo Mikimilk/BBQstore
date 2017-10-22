@@ -204,13 +204,14 @@ class World:
         self.Beef_list_sprite = arcade.SpriteList()
         self.Pig_list_sprite = arcade.SpriteList()
         self.Chic_list_sprite = arcade.SpriteList()
-        self.All_BBQ_list = arcade.SpriteList()
 
         #initialize stove status and stove position and What on stove
         self.stove_status = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.stove_position = [60, 100, 140, 183, 226, 266, 306, 343, 382, 423]
         self.what_on_stove = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # 0 = Nothing ,1 = Beef ,2 = Pig ,3 = Chicken
         self.beef_on_stove = []
+        self.pig_on_stove = []
+        self.chic_on_stove = []
         #Roasting time
         self.roasting_time = roasting
         #make a bag
@@ -227,13 +228,10 @@ class World:
                 self.Beef_sprite = arcade.Sprite("image/BeefRare.png")
                 self.Beef_sprite.set_position(self.stove_position[i],100) #Beef n
                 beef_on_stove = self.stove_position[i] #Beef n is on position i
-                print(beef_on_stove)
                 break
-
             #contend Beef to list.
             self.Beef_list.append(Beef())
             self.Beef_list_sprite.append(self.Beef_sprite)
-            self.All_BBQ_list.append(self.Beef_sprite)
             self.beef_on_stove.append(beef_on_stove)
 
 
@@ -245,11 +243,12 @@ class World:
                 self.what_on_stove[i] = 2
                 Pig_sprite = arcade.Sprite("image/PigRare.png")
                 Pig_sprite.set_position(self.stove_position[i],100)
+                pig_on_stove = self.stove_position[i]
                 break
             #contend Pig to list.
             self.Pig_list.append(Pig())
             self.Pig_list_sprite.append(Pig_sprite)
-            self.All_BBQ_list.append(Pig_sprite)
+            self.pig_on_stove.append(pig_on_stove)
 
         if self.player.hit(self.button3,20):
             for i in range(len(self.stove_status)):
@@ -259,42 +258,53 @@ class World:
                 self.what_on_stove[i] = 3
                 Chic_sprite = arcade.Sprite("image/ChicRare.png")
                 Chic_sprite.set_position(self.stove_position[i],100)
+                chic_on_stove = self.stove_position[i]
                 break
             #contend Chicken to list.
             self.Chic_list.append(Chicken()) 
             self.Chic_list_sprite.append(Chic_sprite)     
-            self.All_BBQ_list.append(Chic_sprite)
+            self.chic_on_stove.append(chic_on_stove)
 
         #Pick up BBQ from the stove
         for i in range(len(self.Beef_list_sprite)):
             if abs(self.player.x - self.Beef_list_sprite[i].center_x) <= 20 and abs(self.player.y - self.Beef_list_sprite[i].center_y) <= 20 :
                 for n in range(len(self.beef_on_stove)):
                     if self.beef_on_stove[n] == self.Beef_list_sprite[i].center_x:
-                        print("Kill position :")
-                        print(self.beef_on_stove[n])
+                        for d in range(len(self.stove_position)):
+                            if self.beef_on_stove[n] == self.stove_position[d]:
+                                self.stove_status[d] = 0
+                                self.what_on_stove[d] = 0
+                                break
                         del self.beef_on_stove[n]
-                        print("Kill position complete.")
                         break
                 self.Beef_list_sprite[i].kill()
-                print("Kill Beef from the list complete.")
-                print("The number of beefs on the stove.")
-                print(len(self.beef_on_stove))
-
 
 
         for i in range(len(self.Pig_list_sprite)):
             if abs(self.player.x - self.Pig_list_sprite[i].center_x) <= 20 and abs(self.player.y - self.Pig_list_sprite[i].center_y) <= 20 :
+                for n in range(len(self.pig_on_stove)):
+                    if self.pig_on_stove[n] == self.Pig_list_sprite[i].center_x:
+                        for d in range(len(self.stove_position)):
+                            if self.pig_on_stove[n] == self.stove_position[d]:
+                                self.stove_status[d] = 0
+                                self.what_on_stove[d] = 0
+                                break
+                        del self.pig_on_stove[n]
+                        break
                 self.Pig_list_sprite[i].kill()
-                print("After kill")
-                print("Pig on stove:")
-                print(len(self.Pig_list_sprite))
 
         for i in range(len(self.Chic_list_sprite)):
             if abs(self.player.x - self.Chic_list_sprite[i].center_x) <= 20 and abs(self.player.y - self.Chic_list_sprite[i].center_y) <= 20 :
+                for n in range(len(self.chic_on_stove)):
+                    if self.chic_on_stove[n] == self.Chic_list_sprite[i].center_x:
+                        for d in range(len(self.stove_position)):
+                            if self.chic_on_stove[n] == self.stove_position[d]:
+                                self.stove_status[d] = 0
+                                self.what_on_stove[d] = 0
+                                break
+                        del self.chic_on_stove[n]
+                        break
                 self.Chic_list_sprite[i].kill()
-                print("After kill")
-                print("Chic on stove:")
-                print(len(self.Chic_list_sprite))
             
 
     def update(self,delta):
