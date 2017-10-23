@@ -48,7 +48,9 @@ class BBQwindow(arcade.Window):
         self.Button3_sprite = ModelSprite("image/Button3.png",model=self.world.button3)
         #initialize Bag
         self.Bag_sprite = ModelSprite("image/Bag.png",model=self.world.bag)
-
+        #make Game Time
+        self.Game_Time = 60.0
+        self.timer_text = None
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.world.player.on_mouse_motion(x, y, dx, dy)
@@ -89,6 +91,24 @@ class BBQwindow(arcade.Window):
         self.world.Pig_list_sprite.draw()
         self.world.Chic_list_sprite.draw()
 
+        #draw BBQ in bag.
+        Beef = "Beef: {}".format(self.world.bag.Finish_Beef_list)
+        arcade.draw_text(Beef,640,280, arcade.color.BLACK, 14)
+
+        Pig = "Pork: {}".format(self.world.bag.Finish_Pig_list)
+        arcade.draw_text(Pig,640,260, arcade.color.BLACK, 14)
+
+        Chic = "Chicken: {}".format(self.world.bag.Finish_Chic_list)
+        arcade.draw_text(Chic,640,240, arcade.color.BLACK, 14)
+
+        #dram game time
+        seconds = int(self.Game_Time) % 60
+        minutes = int(self.Game_Time) // 60
+
+        output = f"Time: {minutes:02d}:{seconds:02d}"
+        self.timer_text = arcade.create_text(output, arcade.color.BLACK, 17)
+        arcade.render_text(self.timer_text, 100, 510)
+
         #draw player
         self.player_sprite.draw()
         
@@ -96,7 +116,7 @@ class BBQwindow(arcade.Window):
     def update(self,delta):
         
         self.world.update(delta)
-
+        self.Game_Time -= delta
  
 if __name__ == '__main__':
     window = BBQwindow(SCREEN_WIDTH, SCREEN_HEIGHT)

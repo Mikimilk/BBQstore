@@ -2,7 +2,7 @@ import arcade
 import random
 from pyglet.window import mouse
 roasting = 5.0
-
+gametime = 20.0
 
 class Model:
     def __init__(self, world, x, y):
@@ -68,6 +68,9 @@ class Bag(Model):
         super().__init__(world ,x ,y)
         self.x = x
         self.y = y
+        self.Finish_Beef_list = 0
+        self.Finish_Pig_list = 0
+        self.Finish_Chic_list = 0
     def update(self,delta):
         pass
 
@@ -220,6 +223,7 @@ class World:
 
    
     def on_mouse_press(self,x,y,buttons,modifiers):
+    #Push BBQ to the stove
         if self.player.hit(self.button1,20):
             for i in range(len(self.stove_status)): 
                 if self.stove_status[i]==1: #check stove status before push a BBQ
@@ -269,19 +273,20 @@ class World:
             self.All_BBQ_list.append(Chic_sprite)
             self.chic_on_stove.append(chic_on_stove)
 
-        #Pick up BBQ from the stove
+    #Pick up BBQ from the stove
         if len(self.Beef_list_sprite) != 0:
-            for i in range(len(self.Beef_list_sprite)):
+            for i in range(len(self.Beef_list_sprite)): #For kill member of Beef_list_sprite
                 if abs(self.player.x - self.Beef_list_sprite[i].center_x) <= 20 and abs(self.player.y - self.Beef_list_sprite[i].center_y) <= 20 :
-                    for n in range(len(self.beef_on_stove)):
+                    for n in range(len(self.beef_on_stove)): #For setting status of stove AND delete member of beef_on_stove
                         if self.beef_on_stove[n] == self.Beef_list_sprite[i].center_x:
-                            for d in range(len(self.stove_position)):
+                            for d in range(len(self.stove_position)): 
                                 if self.beef_on_stove[n] == self.stove_position[d]:
                                     self.stove_status[d] = 0
                                     self.what_on_stove[d] = 0
                                     break
                             del self.beef_on_stove[n]
                             break    
+                    self.bag.Finish_Beef_list += 1
                     self.Beef_list_sprite[i].kill()
                     break
 
@@ -297,6 +302,7 @@ class World:
                                     break
                             del self.pig_on_stove[n]
                             break
+                    self.bag.Finish_Pig_list += 1
                     self.Pig_list_sprite[i].kill()
                     break
 
@@ -312,6 +318,7 @@ class World:
                                     break
                             del self.chic_on_stove[n]
                             break
+                    self.bag.Finish_Chic_list += 1
                     self.Chic_list_sprite[i].kill()
                     break
             
@@ -322,20 +329,19 @@ class World:
                 continue
             N = n # N is current position.
             if self.what_on_stove[n]==1 :#Stove's position n is beef
-
                 if len(self.Beef_list_sprite) != 0:
                     for i in range(len(self.Beef_list_sprite)): #To check Beef_sprite in Beef_list_sprite is on position i ??
-                        self.Beef_list[i].update(delta) #Update Beef()
                         Beef_sprite = self.Beef_list_sprite[i] #Decleration Beef_sprite as Beef_list_sprite i     
                         if Beef_sprite.center_x != self.stove_position[N]: #Check position of Beef_sprite(Beef_list_sprite i) 
                             continue
-  
+                        self.Beef_list[i].update(delta) #Update Beef()
                         seconds = int(self.Beef_list[i].roasting_time) % 60
                         minutes = int(self.Beef_list[i].roasting_time) // 60
                         break
                     if seconds==0 or minutes<0 :
                         Beef_sprite.texture = arcade.load_texture("image/BeefWell.png")
                         Beef_sprite.changed = True
+                        break
 
             elif self.what_on_stove[n]==2 :
                 if len(self.Pig_list_sprite) != 0:
@@ -351,6 +357,7 @@ class World:
                     if seconds==0 or minutes<0 :
                         Pig_sprite.texture = arcade.load_texture("image/PigWell.png")
                         Pig_sprite.changed = True
+                        break
 
             elif self.what_on_stove[n]==3 :
                 if len(self.Chic_list_sprite) != 0:
@@ -366,5 +373,5 @@ class World:
                     if seconds==0 or minutes<0 :
                         Chic_sprite.texture = arcade.load_texture("image/ChicWell.png")
                         Chic_sprite.changed = True
-
+                        break
         
