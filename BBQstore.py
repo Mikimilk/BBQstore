@@ -1,6 +1,6 @@
 import arcade
-import random
-from Actor import World,Player,Stove1,Stove2,Stove3,Stove4,Stove5,Stove6,Stove7,Stove8,Stove9,Stove10,Model,Collectable,Beef,Pig,Chicken,Bag
+from random import randint
+from Actor import World,Player,Stove1,Stove2,Stove3,Stove4,Stove5,Stove6,Stove7,Stove8,Stove9,Stove10,Model,Collectable,Beef,Pig,Chicken,Bag,Order
 from pyglet.window import mouse
 
 roasting = 5
@@ -51,6 +51,10 @@ class BBQwindow(arcade.Window):
         #make Game Time
         self.Game_Time = 60.0
         self.timer_text = None
+        #make text position in each orders.
+        self.Order_text_position_x = [[50,125,80],[345,420,370],[150,225,180]]
+        self.Order_text_position_y = [[460,460,430],[430,430,400],[330,330,300]]
+        
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.world.player.on_mouse_motion(x, y, dx, dy)
@@ -108,6 +112,31 @@ class BBQwindow(arcade.Window):
         output = f"Time: {minutes:02d}:{seconds:02d}"
         self.timer_text = arcade.create_text(output, arcade.color.BLACK, 17)
         arcade.render_text(self.timer_text, 100, 510)
+
+        #draw order
+        for i in range(3):
+            if self.world.Draw_text_order_list[i] :         
+                self.world.Order_sprite_list[i].draw()
+
+
+        #draw choose Order
+        self.world.choose_Order.draw()
+
+        #draw text Order
+        for n in range(3): #(order n) position(Beef,Pork,Chicken) 
+            if self.world.Draw_text_order_list[n] : 
+                if n==0:
+                    arcade.render_text(self.world.Beef_order1 ,self.Order_text_position_x[n][0],self.Order_text_position_y[n][0])
+                    arcade.render_text(self.world.Pig_order1 ,self.Order_text_position_x[n][1],self.Order_text_position_y[n][1])
+                    arcade.render_text(self.world.Chic_order1 ,self.Order_text_position_x[n][2],self.Order_text_position_y[n][2])
+                if n==1:
+                    arcade.render_text(self.world.Beef_order2 ,self.Order_text_position_x[n][0],self.Order_text_position_y[n][0])
+                    arcade.render_text(self.world.Pig_order2,self.Order_text_position_x[n][1],self.Order_text_position_y[n][1])
+                    arcade.render_text(self.world.Chic_order2 ,self.Order_text_position_x[n][2],self.Order_text_position_y[n][2])
+                if n==2:
+                    arcade.render_text(self.world.Beef_order3 ,self.Order_text_position_x[n][0],self.Order_text_position_y[n][0])
+                    arcade.render_text(self.world.Pig_order3 ,self.Order_text_position_x[n][1],self.Order_text_position_y[n][1])
+                    arcade.render_text(self.world.Chic_order3 ,self.Order_text_position_x[n][2],self.Order_text_position_y[n][2])
 
         #draw player
         self.player_sprite.draw()

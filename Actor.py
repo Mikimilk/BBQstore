@@ -1,8 +1,10 @@
 import arcade
-import random
+from random import randint
 from pyglet.window import mouse
+import time
 roasting = 5.0
-gametime = 20.0
+gametime = 60.0
+OrderCome = 30.0
 
 class Model:
     def __init__(self, world, x, y):
@@ -73,6 +75,17 @@ class Bag(Model):
         self.Finish_Chic_list = 0
     def update(self,delta):
         pass
+
+class Order:
+    def __init__(self):
+        super().__init__()
+        self.changed = False
+        self.order_time = randint(20,30)
+        self.Beef_Order = randint(1,4)
+        self.Pig_Order = randint(1,4)
+        self.Chic_Order = randint(1,4)
+    def update(self,delta):
+        self.order_time -= delta
 
 class Stove1(Model):
 
@@ -218,10 +231,68 @@ class World:
         self.chic_on_stove = []
         #Roasting time
         self.roasting_time = roasting
+
         #make a bag
         self.bag = Bag(self,670,270)
 
-   
+        #make Order text
+        self.Order_come = OrderCome
+        self.Order_position_x = [125,410,220]
+        self.Order_position_y = [440,415,315]
+        self.order = Order()
+        self.Order_sprite_list = arcade.SpriteList()
+        for i in range(3):
+            Order_sprite = arcade.Sprite("image/Order.png")
+            Order_sprite.set_position(self.Order_position_x[i],self.Order_position_y[i])
+            self.Order_sprite_list.append(Order_sprite)
+
+        self.choose_Order = arcade.SpriteList()
+        self.current_order = 0 # 0 = Not yet choose ,1 = choose order1 ,2 = choose order2 ,3 = choose order3   
+        
+        self.Draw_text_order_list = []
+        self.Beef_Order_list = []
+        self.Pig_Order_list = []
+        self.Chic_Order_list = []
+        for i in range(3):
+            self.Draw_text_order = True
+            self.Draw_text_order_list.append(self.Draw_text_order)
+
+            self.Beef_Order = randint(1,4)
+            self.Pig_Order = randint(1,4)
+            self.Chic_Order = randint(1,4)
+            self.Beef_Order_list.append(self.Beef_Order)
+            self.Pig_Order_list.append(self.Pig_Order)
+            self.Chic_Order_list.append(self.Chic_Order)
+
+        for i in range(3):
+            if self.Draw_text_order_list[i]:
+                if i==0:
+                    Beef_order = f"Beef: {self.Beef_Order_list[0]}"
+                    self.Beef_order1 = arcade.create_text(Beef_order , arcade.color.BLACK, 17)
+                    Pig_order = f"Pork: {self.Pig_Order_list[0]}"
+                    self.Pig_order1 = arcade.create_text(Pig_order , arcade.color.BLACK, 17)
+                    Chic_order = f"Chicken: {self.Chic_Order_list[0]}"
+                    self.Chic_order1 = arcade.create_text(Chic_order , arcade.color.BLACK, 17)
+
+                if i==1:
+                    Beef_order = f"Beef: {self.Beef_Order_list[1]}"
+                    self.Beef_order2 = arcade.create_text(Beef_order , arcade.color.BLACK, 17)
+                    Pig_order = f"Pork: {self.Pig_Order_list[1]}"
+                    self.Pig_order2 = arcade.create_text(Pig_order , arcade.color.BLACK, 17)
+                    Chic_order = f"Chicken: {self.Chic_Order_list[1]}"
+                    self.Chic_order2 = arcade.create_text(Chic_order , arcade.color.BLACK, 17)
+
+                if i==2:
+                    Beef_order = f"Beef: {self.Beef_Order_list[2]}"
+                    self.Beef_order3 = arcade.create_text(Beef_order , arcade.color.BLACK, 17)
+                    Pig_order = f"Pork: {self.Pig_Order_list[2]}"
+                    self.Pig_order3 = arcade.create_text(Pig_order , arcade.color.BLACK, 17)
+                    Chic_order = f"Chicken: {self.Chic_Order_list[2]}"
+                    self.Chic_order3 = arcade.create_text(Chic_order , arcade.color.BLACK, 17)
+                
+
+
+
     def on_mouse_press(self,x,y,buttons,modifiers):
     #Push BBQ to the stove
         if self.player.hit(self.button1,20):
@@ -247,14 +318,14 @@ class World:
                     continue
                 self.stove_status[i] = 1
                 self.what_on_stove[i] = 2
-                Pig_sprite = arcade.Sprite("image/PigRare.png")
-                Pig_sprite.set_position(self.stove_position[i],100)
+                self.Pig_sprite = arcade.Sprite("image/PigRare.png")
+                self.Pig_sprite.set_position(self.stove_position[i],100)
                 pig_on_stove = self.stove_position[i]
                 break
             #contend Pig to list.
             self.Pig_list.append(Pig())
-            self.Pig_list_sprite.append(Pig_sprite)
-            self.All_BBQ_list.append(Pig_sprite)
+            self.Pig_list_sprite.append(self.Pig_sprite)
+            self.All_BBQ_list.append(self.Pig_sprite)
             self.pig_on_stove.append(pig_on_stove)
 
         if self.player.hit(self.button3,20):
@@ -263,14 +334,14 @@ class World:
                     continue
                 self.stove_status[i] = 1
                 self.what_on_stove[i] = 3
-                Chic_sprite = arcade.Sprite("image/ChicRare.png")
-                Chic_sprite.set_position(self.stove_position[i],100)
+                self.Chic_sprite = arcade.Sprite("image/ChicRare.png")
+                self.Chic_sprite.set_position(self.stove_position[i],100)
                 chic_on_stove = self.stove_position[i]
                 break
             #contend Chicken to list.
             self.Chic_list.append(Chicken()) 
-            self.Chic_list_sprite.append(Chic_sprite)     
-            self.All_BBQ_list.append(Chic_sprite)
+            self.Chic_list_sprite.append(self.Chic_sprite)     
+            self.All_BBQ_list.append(self.Chic_sprite)
             self.chic_on_stove.append(chic_on_stove)
 
     #Pick up BBQ from the stove
@@ -321,8 +392,33 @@ class World:
                     self.bag.Finish_Chic_list += 1
                     self.Chic_list_sprite[i].kill()
                     break
-            
+
+    #Choose Order
+        if len(self.choose_Order)==0 :
+            for i in range(3):
+                if abs(self.player.x - self.Order_sprite_list[i].center_x) <= 100 and abs(self.player.y - self.Order_sprite_list[i].center_y) <= 100 :
+                    choose_Order = arcade.Sprite("image/Press_Order.png")
+                    choose_Order.set_position(self.Order_position_x[i],self.Order_position_y[i])
+                    self.choose_Order.append(choose_Order)
+                    self.current_order = i+1
+                    break
+
+    #Sell BBQ
+        if self.player.hit(self.bag , 100):
+            for i in range(3):
+                if self.current_order == i+1 :
+                    if self.bag.Finish_Beef_list == self.Beef_Order_list[i] and self.bag.Finish_Pig_list == self.Pig_Order_list[i] and self.bag.Finish_Chic_list == self.Chic_Order_list[i] :
+                        self.bag.Finish_Beef_list = 0
+                        self.bag.Finish_Pig_list = 0
+                        self.bag.Finish_Chic_list = 0
+                        self.Draw_text_order_list[i] = False
+                        self.choose_Order[0].kill()
+                        self.current_order = 0
+
+
     def update(self,delta):
+
+        #RoastBBQ#
 
         for n in range(len(self.stove_status)):
             if self.stove_status[n]==0 and self.what_on_stove[n]==0: #Check stove status and what on stove "Nothing -->continue"
@@ -374,4 +470,47 @@ class World:
                         Chic_sprite.texture = arcade.load_texture("image/ChicWell.png")
                         Chic_sprite.changed = True
                         break
+
+        #Order_Coming
+        for i in range(3):
+            if not self.Draw_text_order_list[i]:
+                self.Order_come -= 1
+                if self.Order_come == 0:
+                    self.Draw_text_order_list[i] = True
+                    self.Order_come = 30.0
+                    self.Beef_Order = randint(1,4)
+                    self.Pig_Order = randint(1,4)
+                    self.Chic_Order = randint(1,4)
+                    self.Beef_Order_list.append(self.Beef_Order)
+                    self.Pig_Order_list.append(self.Pig_Order)
+                    self.Chic_Order_list.append(self.Chic_Order)
+                    if i==0:
+                        Beef_order = f"Beef: {self.Beef_Order_list[0]}"
+                        self.Beef_order1 = arcade.create_text(Beef_order , arcade.color.BLACK, 17)
+                        Pig_order = f"Pork: {self.Pig_Order_list[0]}"
+                        self.Pig_order1 = arcade.create_text(Pig_order , arcade.color.BLACK, 17)
+                        Chic_order = f"Chicken: {self.Chic_Order_list[0]}"
+                        self.Chic_order1 = arcade.create_text(Chic_order , arcade.color.BLACK, 17)
+
+                    if i==1:
+                        Beef_order = f"Beef: {self.Beef_Order_list[1]}"
+                        self.Beef_order2 = arcade.create_text(Beef_order , arcade.color.BLACK, 17)
+                        Pig_order = f"Pork: {self.Pig_Order_list[1]}"
+                        self.Pig_order2 = arcade.create_text(Pig_order , arcade.color.BLACK, 17)
+                        Chic_order = f"Chicken: {self.Chic_Order_list[1]}"
+                        self.Chic_order2 = arcade.create_text(Chic_order , arcade.color.BLACK, 17)
+
+                    if i==2:
+                        Beef_order = f"Beef: {self.Beef_Order_list[2]}"
+                        self.Beef_order3 = arcade.create_text(Beef_order , arcade.color.BLACK, 17)
+                        Pig_order = f"Pork: {self.Pig_Order_list[2]}"
+                        self.Pig_order3 = arcade.create_text(Pig_order , arcade.color.BLACK, 17)
+                        Chic_order = f"Chicken: {self.Chic_Order_list[2]}"
+                        self.Chic_order3 = arcade.create_text(Chic_order , arcade.color.BLACK, 17)
+
         
+
+    
+                    
+                
+
