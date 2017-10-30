@@ -122,7 +122,7 @@ class BBQwindow(arcade.Window):
         #draw choose Order
         self.world.choose_Order.draw()
 
-        #draw text Order
+        #draw order text
         for n in range(3): #(order n) position(Beef,Pork,Chicken) 
             if self.world.Draw_text_order_list[n] : 
                 if n==0:
@@ -137,6 +137,11 @@ class BBQwindow(arcade.Window):
                     arcade.render_text(self.world.Beef_order3 ,self.Order_text_position_x[n][0],self.Order_text_position_y[n][0])
                     arcade.render_text(self.world.Pig_order3 ,self.Order_text_position_x[n][1],self.Order_text_position_y[n][1])
                     arcade.render_text(self.world.Chic_order3 ,self.Order_text_position_x[n][2],self.Order_text_position_y[n][2])
+
+        #draw score text
+        output = f"Score: {self.world.Total_score}"
+        self.score_text = arcade.create_text(output, arcade.color.BLACK, 17)
+        arcade.render_text(self.score_text, 630, 510)
 
         #draw player
         self.player_sprite.draw()
