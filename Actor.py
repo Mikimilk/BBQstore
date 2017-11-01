@@ -77,6 +77,13 @@ class Bag(Model):
     def update(self,delta):
         pass
 
+class Bin(Model):
+    def __init__(self, world ,x ,y):
+        super().__init__(world ,x ,y)
+
+    def update(self,delta):
+        pass
+
 class Order:
     def __init__(self):
         super().__init__()
@@ -190,20 +197,20 @@ class World:
         #create player and set position.
         self.player = Player(self,500,500)
         #make the stove by a piece of stove(10piece)
-        self.stove1 = Stove1(self,60,100) 
-        self.stove2 = Stove2(self,100,100) 
-        self.stove3 = Stove3(self,140,100) 
-        self.stove4 = Stove4(self,183,100) 
-        self.stove5 = Stove5(self,226,100) 
-        self.stove6 = Stove6(self,266,100) 
-        self.stove7 = Stove7(self,306,100) 
-        self.stove8 = Stove8(self,343,100) 
-        self.stove9 = Stove9(self,382,100) 
-        self.stove10 = Stove10(self,423,100)
+        self.stove1 = Stove1(self,59,84) 
+        self.stove2 = Stove2(self,116,84) 
+        self.stove3 = Stove3(self,153,84) 
+        self.stove4 = Stove4(self,190,84)
+        self.stove5 = Stove5(self,228,84) 
+        self.stove6 = Stove6(self,267,84) 
+        self.stove7 = Stove7(self,306,84) 
+        self.stove8 = Stove8(self,347,84) 
+        self.stove9 = Stove9(self,387,84) 
+        self.stove10 = Stove10(self,447,84)
         #make buttons
-        self.button1 = Button1(self,545,100)
-        self.button2 = Button2(self,605,100)
-        self.button3 = Button3(self,665,100)
+        self.button1 = Button1(self,345,174)
+        self.button2 = Button2(self,265,170)
+        self.button3 = Button3(self,185,172)
         #make Beef class
         self.Beef_list = []
         beef = Beef()
@@ -225,7 +232,7 @@ class World:
 
         #initialize stove status and stove position and What on stove
         self.stove_status = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.stove_position = [60, 100, 140, 183, 226, 266, 306, 343, 382, 423]
+        self.stove_position = [77, 116, 153, 190, 228, 267, 306, 347, 387, 430]
         self.what_on_stove = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # 0 = Nothing ,1 = Beef ,2 = Pig ,3 = Chicken
         self.beef_on_stove = []
         self.pig_on_stove = []
@@ -235,6 +242,9 @@ class World:
 
         #make a bag
         self.bag = Bag(self,670,270)
+
+        #make a bin
+        self.bin = Bin(self,640,45)
 
         #make Order
         #Order sprite
@@ -312,7 +322,7 @@ class World:
                 self.stove_status[i] = 1 #stove i is not availble
                 self.what_on_stove[i] = 1 #beef is on stove i
                 self.Beef_sprite = arcade.Sprite("image/BeefRare.png")
-                self.Beef_sprite.set_position(self.stove_position[i],100) #Beef n
+                self.Beef_sprite.set_position(self.stove_position[i],80) #Beef n
                 beef_on_stove = self.stove_position[i] #Beef n is on position i
                 Count_beef_rare = 0 #To keep how beef BBQ cooked.
                 break
@@ -331,7 +341,7 @@ class World:
                 self.stove_status[i] = 1
                 self.what_on_stove[i] = 2
                 self.Pig_sprite = arcade.Sprite("image/PigRare.png")
-                self.Pig_sprite.set_position(self.stove_position[i],100)
+                self.Pig_sprite.set_position(self.stove_position[i],80)
                 pig_on_stove = self.stove_position[i]
                 Count_pig_rare = 0
                 break
@@ -349,7 +359,7 @@ class World:
                 self.stove_status[i] = 1
                 self.what_on_stove[i] = 3
                 self.Chic_sprite = arcade.Sprite("image/ChicRare.png")
-                self.Chic_sprite.set_position(self.stove_position[i],100)
+                self.Chic_sprite.set_position(self.stove_position[i],76)
                 chic_on_stove = self.stove_position[i]
                 Count_chic_rare = 0
                 break
@@ -457,6 +467,12 @@ class World:
                         self.choose_Order[0].kill()
                         self.current_order = 0
 
+    #Get rid of BBQ
+        if self.player.hit(self.bin, 100):
+            self.bag.Finish_Beef_list = 0
+            self.bag.Finish_Pig_list = 0
+            self.bag.Finish_Chic_list = 0
+            self.Calculate_order = 0
 
     def update(self,delta):
 

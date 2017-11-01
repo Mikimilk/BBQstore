@@ -1,6 +1,6 @@
 import arcade
 from random import randint
-from Actor import World,Player,Stove1,Stove2,Stove3,Stove4,Stove5,Stove6,Stove7,Stove8,Stove9,Stove10,Model,Collectable,Beef,Pig,Chicken,Bag,Order
+from Actor2 import World,Player,Stove1,Stove2,Stove3,Stove4,Stove5,Stove6,Stove7,Stove8,Stove9,Stove10,Model,Collectable,Beef,Pig,Chicken,Bag,Order
 from pyglet.window import mouse
 
 roasting = 5
@@ -26,21 +26,21 @@ class BBQwindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
         self.world = World(width, height)
-        self.background = arcade.load_texture("image/Background.png") 
+        self.background = arcade.load_texture("image/BGG.png") 
         #initialize player
         self.player_sprite = ModelSprite("image/hand1.png",model=self.world.player)
 
         #initialize stove
-        self.Stove1_sprite = ModelSprite("image/ApieceofStove/images/Stove_01.jpg",model=self.world.stove1) 
-        self.Stove2_sprite = ModelSprite("image/ApieceofStove/images/Stove_02.jpg",model=self.world.stove2)
-        self.Stove3_sprite = ModelSprite("image/ApieceofStove/images/Stove_03.jpg",model=self.world.stove3)
-        self.Stove4_sprite = ModelSprite("image/ApieceofStove/images/Stove_04.jpg",model=self.world.stove4)
-        self.Stove5_sprite = ModelSprite("image/ApieceofStove/images/Stove_05.jpg",model=self.world.stove5)
-        self.Stove6_sprite = ModelSprite("image/ApieceofStove/images/Stove_06.jpg",model=self.world.stove6)
-        self.Stove7_sprite = ModelSprite("image/ApieceofStove/images/Stove_07.jpg",model=self.world.stove7)
-        self.Stove8_sprite = ModelSprite("image/ApieceofStove/images/Stove_08.jpg",model=self.world.stove8)
-        self.Stove9_sprite = ModelSprite("image/ApieceofStove/images/Stove_09.jpg",model=self.world.stove9)
-        self.Stove10_sprite = ModelSprite("image/ApieceofStove/images/Stove_10.jpg",model=self.world.stove10) 
+        self.Stove1_sprite = ModelSprite("image/ApieceofStove/Stove_01.png",model=self.world.stove1) 
+        self.Stove2_sprite = ModelSprite("image/ApieceofStove/Stove_02.png",model=self.world.stove2)
+        self.Stove3_sprite = ModelSprite("image/ApieceofStove/Stove_03.png",model=self.world.stove3)
+        self.Stove4_sprite = ModelSprite("image/ApieceofStove/Stove_04.png",model=self.world.stove4)
+        self.Stove5_sprite = ModelSprite("image/ApieceofStove/Stove_05.png",model=self.world.stove5)
+        self.Stove6_sprite = ModelSprite("image/ApieceofStove/Stove_06.png",model=self.world.stove6)
+        self.Stove7_sprite = ModelSprite("image/ApieceofStove/Stove_07.png",model=self.world.stove7)
+        self.Stove8_sprite = ModelSprite("image/ApieceofStove/Stove_08.png",model=self.world.stove8)
+        self.Stove9_sprite = ModelSprite("image/ApieceofStove/Stove_09.png",model=self.world.stove9)
+        self.Stove10_sprite = ModelSprite("image/ApieceofStove/Stove_10.png",model=self.world.stove10) 
         
         #initialize button
         self.Button1_sprite = ModelSprite("image/Button1.png",model=self.world.button1)
@@ -48,6 +48,8 @@ class BBQwindow(arcade.Window):
         self.Button3_sprite = ModelSprite("image/Button3.png",model=self.world.button3)
         #initialize Bag
         self.Bag_sprite = ModelSprite("image/Bag.png",model=self.world.bag)
+        #initialize Bin
+        self.Bin_sprite = ModelSprite("image/Bin.png",model=self.world.bin)
         #make Game Time
         self.Game_Time = 60.0
         self.timer_text = None
@@ -73,17 +75,21 @@ class BBQwindow(arcade.Window):
                                       SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         #draw bag
         self.Bag_sprite.draw()
+
+        #draw a bin
+        self.Bin_sprite.draw()
+
         #draw all a piece of stove.
         self.Stove1_sprite.draw()
-        self.Stove2_sprite.draw()
-        self.Stove3_sprite.draw()
-        self.Stove4_sprite.draw()
-        self.Stove5_sprite.draw()
-        self.Stove6_sprite.draw()
         self.Stove7_sprite.draw()
+        self.Stove6_sprite.draw()
+        self.Stove5_sprite.draw()
+        self.Stove4_sprite.draw()
+        self.Stove3_sprite.draw()
+        self.Stove2_sprite.draw()
         self.Stove8_sprite.draw()
-        self.Stove9_sprite.draw()
         self.Stove10_sprite.draw()
+        self.Stove9_sprite.draw()
 
         #draw all Button
         self.Button1_sprite.draw()
