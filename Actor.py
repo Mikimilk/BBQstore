@@ -570,10 +570,3 @@ class World:
                         self.Pig_order3 = arcade.create_text(Pig_order , arcade.color.BLACK, 17)
                         Chic_order = f"Chicken: {self.Chic_Order_list[2]}"
                         self.Chic_order3 = arcade.create_text(Chic_order , arcade.color.BLACK, 17)
-
-        
-
-    
-                    
-                
-

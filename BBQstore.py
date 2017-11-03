@@ -104,7 +104,7 @@ class BBQwindow(arcade.Window):
 
         elif self.current_state == 4 :
             self.current_state = 0   
-        print(self.current_state)
+
 
     def draw_game(self):
 
@@ -159,7 +159,6 @@ class BBQwindow(arcade.Window):
             if self.world.Draw_text_order_list[i] :         
                 self.world.Order_sprite_list[i].draw()
 
-
         #draw choose Order
         self.world.choose_Order.draw()
 
@@ -187,6 +186,11 @@ class BBQwindow(arcade.Window):
         #draw player
         self.player_sprite.draw()
 
+    def draw_GameOver(self):
+
+        SCORE = "YOUR SCORE: {}".format(self.world.Total_score)
+        arcade.draw_text(SCORE,280,SCREEN_HEIGHT//2, arcade.color.RED, 24)
+
     def on_draw(self): 
         arcade.start_render()
 
@@ -201,6 +205,7 @@ class BBQwindow(arcade.Window):
             self.draw_game()
         elif self.current_state == 4 :
             self.draw_instructions_page(4)
+            self.draw_GameOver()
 
         
 
